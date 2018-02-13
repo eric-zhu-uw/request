@@ -23,6 +23,10 @@ const development = {
     secret: 'KMylyQyPsgCLaAxbMIEH',
     cookie: { httpOnly: true, expires: sessionExpiryDate },
   },
+  winston: {
+    timestamp: () => new Date().toLocaleTimeString(),
+    colorize: true,
+  },
 };
 
 const config = {
