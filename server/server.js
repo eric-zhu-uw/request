@@ -12,7 +12,6 @@ import passport from './passport';
 import logger from './logger';
 
 const app = express();
-const __DEV__ = process.env.NODE_ENV === 'development'; // eslint-disable-line no-underscore-dangle
 
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
@@ -21,10 +20,15 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan(__DEV__ ? 'dev' : 'common'));
-logger.level = process.env.LOGGER_LEVEL || 'info';
+logger.level = process.env.LOGGER_LEVEL;
 
 if (__DEV__) {
   app.enable('trust proxy');
+  logger.warn(
+    `Running in ${
+      process.env.NODE_ENV
+    } environment, not suitable for production use.`,
+  );
 }
 
 const pe = new PrettyError();
@@ -50,8 +54,8 @@ app.use(passport.session());
 // -----/ Initialize Routes --------------------
 app.use('/', routes);
 
-app.listen(config.app.port, () => {
-  logger.info(`The server is running at http://localhost:${config.app.port}/`);
+app.listen(process.env.PORT, () => {
+  logger.info(`The server is running at http://localhost:${process.env.PORT}/`);
 });
 
 export default app;

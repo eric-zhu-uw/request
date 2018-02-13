@@ -6,9 +6,6 @@ const env = process.env.NODE_ENV;
 const sessionExpiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
 
 const development = {
-  app: {
-    port: parseInt(process.env.DEV_APP_PORT, 10) || 3000,
-  },
   db: {
     database: process.env.DEV_DB_DATABASE || 'request',
     host: process.env.DEV_DB_HOST || 'localhost',
