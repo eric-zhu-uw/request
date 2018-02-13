@@ -33,7 +33,10 @@
     "husky": "^0.15.0-rc.8",
     "lint-staged": "^6.1.0",
     "prettier": "1.10.2",
-    "prettier-eslint": "^8.8.1"
+    "prettier-eslint": "^8.8.1",
+    "stylelint": "^8.4.0",
+    "stylelint-config-standard": "^18.0.0",
+    "stylelint-order": "^0.8.0"
   },
   "husky": {
     "hooks": {
@@ -42,6 +45,7 @@
   },
   "lint-staged": {
     "*.{js,jsx}": ["eslint --fix", "git add --force"],
-    "*.{json,md}": ["prettier --write", "git add --force"]
+    "*.{json,md}": ["prettier --write", "git add --force"],
+    "*.{css,less,styl,scss,sass,sss}": ["stylelint --fix", "git add --force"]
   }
 }
