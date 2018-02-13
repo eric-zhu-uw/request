@@ -22,6 +22,8 @@ const development = {
     name: 'sessionId',
     secret: 'KMylyQyPsgCLaAxbMIEH',
     cookie: { httpOnly: true, expires: sessionExpiryDate },
+    resave: false,
+    saveUninitialized: false,
   },
   winston: {
     timestamp: () => new Date().toLocaleTimeString(),
