@@ -1,73 +1,81 @@
 const fs = require('fs');
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
-const isDebug = !process.argv.includes('--release');
-const isVerbose = process.argv.includes('--verbose');
+/* eslint func-names: 0 */
+module.exports = function(env) {
+  let isDebug = true;
+  let buildonly = false;
+  let loggerLevel = "'info'";
+  let port = 3000;
 
-// const reScript = /\.(js|jsx|mjs)$/;
-const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
-const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
+  if (env) {
+    if (env.release) isDebug = false;
+    if (env.buildonly) buildonly = true;
+    if (isDebug) loggerLevel = '"debug"';
+    if (env.verbose) loggerLevel = "'silly'";
+    if (env.port) port = env.port;
+  }
 
-let loggerLevel;
-if (isVerbose) {
-  loggerLevel = '"silly"';
-} else if (isDebug) {
-  loggerLevel = "'debug'";
-} else {
-  loggerLevel = "'info'";
-}
+  // const reScript = /\.(js|jsx|mjs)$/;
+  const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
+  const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 
-const port =
-  parseInt(
-    isDebug ? process.env.DEV_APP_PORT : process.env.PROD_APP_PORT,
-    10,
-  ) || 3000;
+  const config = {
+    target: 'node',
+    devtool: isDebug ? 'eval' : false,
+    entry: `${__dirname}/server/server.js`,
+    output: {
+      filename: 'server.js',
+      path: `${__dirname}/build`,
+    },
+    externals: [
+      fs.readdirSync('node_modules').reduce((acc, mod) => {
+        if (mod === '.bin') {
+          return acc;
+        }
 
-const serverWebpackConfig = {
-  target: 'node',
-  entry: `${__dirname}/server/server.js`,
-  output: {
-    filename: 'server.js',
-    path: `${__dirname}/build`,
-  },
-  externals: [
-    fs.readdirSync('node_modules').reduce((acc, mod) => {
-      if (mod === '.bin') {
+        acc[mod] = `commonjs ${mod}`;
         return acc;
-      }
+      }, {}),
+      nodeExternals({
+        whitelist: [reStyle, reImage],
+      }),
+    ],
 
-      acc[mod] = `commonjs ${mod}`;
-      return acc;
-    }, {}),
-    nodeExternals({
-      whitelist: [reStyle, reImage],
-    }),
-  ],
-
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
           },
         },
-      },
+      ],
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
+        'process.env.LOGGER_LEVEL': loggerLevel,
+        'process.env.PORT': port,
+        __DEV__: isDebug,
+      }),
     ],
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
-      'process.env.LOGGER_LEVEL': loggerLevel,
-      'process.env.PORT': port,
-      __DEV__: isDebug,
-    }),
-  ],
-  watch: isDebug,
-};
+    watch: isDebug && !buildonly,
+  };
 
-module.exports = serverWebpackConfig;
+  if (isDebug && !buildonly)
+    config.plugins.push(
+      new NodemonPlugin({
+        verbose: true,
+        watch: './build/server.js',
+      }),
+    );
+
+  return config;
+};

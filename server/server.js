@@ -13,14 +13,12 @@ import logger from './logger';
 
 const app = express();
 
-global.navigator = global.navigator || {};
-global.navigator.userAgent = global.navigator.userAgent || 'all';
-
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan(__DEV__ ? 'dev' : 'common'));
 logger.level = process.env.LOGGER_LEVEL;
+logger.info(`Logger level: ${logger.level}`);
 
 if (__DEV__) {
   app.enable('trust proxy');

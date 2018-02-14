@@ -24,6 +24,39 @@ node -v `v8.9.4`
 
 npm -v `4.6.1`
 
+## NPM scripts
+
+`yarn start`: start server in dev mode, with automatic server refresh
+`yarn build`: build to `/build` folder
+
+## Modes
+
+append `--env.OPTION` after `yarn xxx` command
+
+ex. `yarn start --env.release`
+
+### Production build
+
+`--env.release`
+
+note: production option does not start the server
+
+### Verbose logging
+
+`--env.verbose`
+
+enables 'silly' level logging
+
+### Port
+
+`--env.port=PORTNUM`
+
+### Build Only
+
+`--env.buildony`
+
+only produces the bundle file without starting server
+
 ## Install dependencies
 
 ### Dev tools Setup
