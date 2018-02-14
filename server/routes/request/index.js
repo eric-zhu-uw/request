@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Request, Ledger } from '../../data/models';
 import sequelize from '../../data/sequelize';
+import logger from '../../logger';
 
 const router = Router();
 
@@ -14,9 +15,12 @@ router.use((req, res, next) => {
 });
 
 router.post('/send', (req, res) => {
-  const { amount, description, receiver } = req.body;
+  const { amount, description, receiver, type } = req.body;
   const sender = req.user.id;
-  Request.create({ sender, receiver, amount, description })
+  if (sender === receiver) {
+    res.send('Error');
+  }
+  Request.create({ sender, receiver, amount, description, type })
     .then(() => res.send('successfully sent request.'))
     .catch(err => res.send(err));
 });
@@ -28,7 +32,7 @@ router.post('/accept', (req, res) => {
   sequelize
     .transaction(t => {
       const updateParams = { active: Date.now() };
-      const searchUpdateParams = { where: { id, receiver } };
+      const searchUpdateParams = { where: { id } };
       const findOneParams = { where: { id } };
       const transaction = { transaction: t };
 
@@ -36,9 +40,21 @@ router.post('/accept', (req, res) => {
         .then(() => Request.findOne(findOneParams, transaction))
         .then(request => {
           const { dataValues } = request;
-          const debit_user = receiver;
-          const { sender: credit_user, description, amount } = dataValues;
+          const transactionType = dataValues.type;
+          const credit_user =
+            transactionType === 'R' ? receiver : dataValues.sender;
+          const debit_user =
+            transactionType === 'S' ? receiver : dataValues.sender;
+          const { sender, description, amount, type } = dataValues;
           const createParams = { debit_user, credit_user, amount, description };
+
+          if (transactionType === 'R') {
+            logger.log('Request for money');
+          } else if (transactionType === 'S') {
+            logger.log('Sent money');
+          } else {
+            logger.log('BIG PROBLEMS');
+          }
 
           return Ledger.create(createParams, transaction);
         });
