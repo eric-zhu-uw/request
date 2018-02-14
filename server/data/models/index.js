@@ -16,10 +16,11 @@ const sync = (...args) => {
         sequelize
           .query(Triggers.updateActives.create)
           .then(() => logger.log('Update Actives Trigger created'));
-
-        sequelize
-          .query(Triggers.updateBalance.create)
-          .then(() => logger.log('Update Balance Trigger created'));
+        sequelize.query(Triggers.updateBalance.drop).then(() => {
+          sequelize
+            .query(Triggers.updateBalance.create)
+            .then(() => logger.log('Update Balance Trigger created'));
+        });
       });
     })
     .catch(err => {
