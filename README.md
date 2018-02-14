@@ -80,5 +80,4 @@ run `yarn` inside `./native`
    DEV_DB_HOST=localhost
    DEV_DB_USER=root
    DEV_DB_PASS='...'
-   DEV_APP_PORT=3000
    ```
