@@ -28,6 +28,10 @@ const Request = sequelize.define('Request', {
     type: Type.STRING(140),
     allowNull: true,
   },
+  type: {
+    type: Type.STRING(),
+    allowNull: false,
+  },
 });
 
 export default Request;

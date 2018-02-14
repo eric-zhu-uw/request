@@ -5,24 +5,26 @@ import Ledger from './ledger';
 import Active from './active';
 import Friend from './friend';
 import { Triggers } from './constants';
+import logger from '../../logger';
 
 const sync = (...args) => {
   sequelize
     .sync(...args)
     .then(() => {
-      console.info('Successfully synced database.');
+      logger.info('Successfully synced database.');
       sequelize.query(Triggers.updateActives.drop).then(() => {
         sequelize
           .query(Triggers.updateActives.create)
-          .then(() => console.log('Update Actives Trigger created'));
-
-        sequelize
-          .query(Triggers.updateBalance.create)
-          .then(() => console.log('Update Balance Trigger created'));
+          .then(() => logger.log('Update Actives Trigger created'));
+        sequelize.query(Triggers.updateBalance.drop).then(() => {
+          sequelize
+            .query(Triggers.updateBalance.create)
+            .then(() => logger.log('Update Balance Trigger created'));
+        });
       });
     })
     .catch(err => {
-      console.error('Unable to sync database', err);
+      logger.error('Unable to sync database', err);
     });
 };
 
