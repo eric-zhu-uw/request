@@ -40,17 +40,14 @@ router.post('/accept', (req, res) => {
         .then(() => Request.findOne(findOneParams, transaction))
         .then(request => {
           const { dataValues } = request;
-          const transactionType = dataValues.type;
-          const credit_user =
-            transactionType === 'R' ? receiver : dataValues.sender;
-          const debit_user =
-            transactionType === 'S' ? receiver : dataValues.sender;
           const { sender, description, amount, type } = dataValues;
+          const credit_user = type === 'R' ? receiver : sender;
+          const debit_user = type === 'S' ? receiver : sender;
           const createParams = { debit_user, credit_user, amount, description };
 
-          if (transactionType === 'R') {
+          if (type === 'R') {
             logger.log('Request for money');
-          } else if (transactionType === 'S') {
+          } else if (type === 'S') {
             logger.log('Sent money');
           } else {
             logger.log('BIG PROBLEMS');
