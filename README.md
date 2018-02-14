@@ -51,25 +51,17 @@ enables 'silly' level logging
 
 `--env.port=PORTNUM`
 
+default port is 3000
+
 ### Build Only
 
-`--env.buildony`
+`--env.buildonly`
 
 only produces the bundle file without starting server
 
 ## Install dependencies
 
-### Dev tools Setup
-
-run `yarn` under the root directory should take care of everything
-
-### Server modules
-
-run `yarn` inside `./server`
-
-### Native modules
-
-run `yarn` inside `./native`
+simply run `yarn` inside root directory
 
 ## Setup to develop
 
