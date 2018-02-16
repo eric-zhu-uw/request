@@ -73,7 +73,7 @@ module.exports = function(env) {
     config.plugins.push(
       new NodemonPlugin({
         verbose: true,
-        watch: './build/server.js',
+        ignore: ['/native/*'],
       }),
     );
 

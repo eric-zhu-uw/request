@@ -1,1 +1,1 @@
-DROP DATABASE request;
+DROP DATABASE IF EXISTS request;

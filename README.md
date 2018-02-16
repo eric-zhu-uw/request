@@ -5,7 +5,7 @@ A tool to manage money between friends.
 ## TODO
 
 * [x] setup linters and basic dev environment for server
-* [ ] setup webpack and automatic build tools for server
+* [x] setup webpack and automatic build tools for server
 * [x] server side logger
 * [ ] look into server-side debuggers
 * [ ] plan out API-endpoint and necessary database tables
@@ -24,52 +24,55 @@ node -v `v8.9.4`
 
 npm -v `4.6.1`
 
-## NPM scripts
+## Developer setup
+
+### Install dependencies
+
+simply run `yarn` inside root directory
+
+### Running the setup script
+
+`$ sh ./tools/make.sh`
+
+### NPM scripts available
 
 `yarn start`: start server in dev mode, with automatic server refresh
 `yarn build`: build to `/build` folder
 
-## Modes
+### Modes
 
 append `--env.OPTION` after `yarn xxx` command
 
 ex. `yarn start --env.release`
 
-### Production build
+#### Production build
 
 `--env.release`
 
 note: production option does not start the server
 
-### Verbose logging
+#### Verbose logging
 
 `--env.verbose`
 
 enables 'silly' level logging
 
-### Port
+#### Port
 
 `--env.port=PORTNUM`
 
 default port is 3000
 
-### Build Only
+#### Build Only
 
 `--env.buildonly`
 
 only produces the bundle file without starting server
 
-## Install dependencies
+2. Config necessary environment variables:
 
-simply run `yarn` inside root directory
-
-## Setup to develop
-
-1. Need to set the correct environment variables
-   1. Create a local `.env file`
-   2. Config necessary environment variables:
-   ```
-   DEV_DB_HOST=localhost
-   DEV_DB_USER=root
-   DEV_DB_PASS='...'
-   ```
+```
+DEV_DB_HOST=localhost
+DEV_DB_USER=root
+DEV_DB_PASS='...'
+```

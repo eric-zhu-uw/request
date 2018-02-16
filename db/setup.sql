@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS request;
+CREATE DATABASE request;
+USE request;
