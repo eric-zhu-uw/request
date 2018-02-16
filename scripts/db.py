@@ -101,7 +101,7 @@ class Connection:
         receiver = users[count]
         count = 0 if count + 1 == len(users) else count + 1
         amount = random.randint(1,500)
-        tp = 'R' if random.randint(0,2)==0 else 'S'
+        tp = 'R' if random.randint(0,1) == 0 else 'S'
         argList = ['("'+ sender+'"', '"'+receiver+'"', str(amount), '"'+tp+'"', 'CURRENT_TIMESTAMP', 'CURRENT_TIMESTAMP)']
         debitUser  = sender if tp == 'R' else receiver
         creditUser = receiver if tp == 'R' else sender
