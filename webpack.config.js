@@ -3,7 +3,7 @@ const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
-/* eslint func-names: 0 */
+/*  eslint func-names: 0  */
 module.exports = function(env) {
   let isDebug = true;
   let buildonly = false;
