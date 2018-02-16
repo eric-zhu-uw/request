@@ -37,4 +37,4 @@ fi
 echo
 echo 😊 About to install dependencies with Yarn...
 yarn
-echo -------------------🇨🇳 Setup completed🇨🇳  --------------------
+echo ------------------- Setup completed --------------------

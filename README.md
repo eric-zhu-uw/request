@@ -9,7 +9,7 @@ A tool to manage money between friends.
 * [x] server side logger
 * [ ] look into server-side debuggers
 * [ ] plan out API-endpoint and necessary database tables
-* [x] re-organize backend code into folder & debate if front-end should be in it's own repository
+* [x] re-organize backend code into folder & debate if front-end should be in its own repository
 * [ ] separate build scripts for nativeIOS|Android|backend and then automatic upload into AWS
 * [ ] setup Redux with React Native
 * [ ] setup mocha tests
