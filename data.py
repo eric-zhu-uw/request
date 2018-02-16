@@ -1,12 +1,15 @@
-import MySQLdb
 import argparse
-import random
 
-choicesList = ['conn_test', 'gen_nums']
+import db
+
+""" TODO: more control over generation """
+choicesList = ['desc_table', 'gen_users', 'gen_requests', 'gen_transactions']
 parser = argparse.ArgumentParser(description='Generate some data')
 parser.add_argument('cmd', default='conn_test', help='What the script should do', choices=choicesList)
-parser.add_argument('-n', type=int , help='number of training steps')
-parser.add_argument('unused', nargs='+', help='Irrelevant info ')
+parser.add_argument('-n', '--number', type=int, default=100 , help='Number of things to add')
+parser.add_argument('--name' , default='user',nargs = '?',help='Default name that users will have')
+parser.add_argument('--table', default='actives', help='What table to describe (used with desc_table)')
+parser.add_argument('unused', nargs='*', help='Irrelevant info ')
 
 
 def parseEnvFile(fileName='.env'):
@@ -18,34 +21,17 @@ def parseEnvFile(fileName='.env'):
   conf = dict(conf)
   return conf['DEV_DB_HOST'], conf['DEV_DB_USER'],conf['DEV_DB_PASS'],conf['DEV_APP_PORT']
 
-def connectionTest(host="localhost",user="root",passwd="",db="request"):
-  db = MySQLdb.connect(host=host,
-                       user=user, passwd=passwd, db=db)
-  cur = db.cursor()
-  cur.execute("describe ACTIVES")
-
-  for row in cur.fetchall():
-    print row[0] + " " + row[1] + " " + str(row[2])
-  db.close()
-
-
-def genNums(n=100, rand=False):
-  r = list(range(n))
-  if rand:
-    random.shuffle(r)
-  for i in r:
-    print('user' + str(i))
-
 
 if __name__ == '__main__':
   host,user,pw,port = parseEnvFile()
   args = parser.parse_args()
-  print args
+  database = db.Connection(host=host,user=user,passwd=pw)
 
-  if args.cmd == 'conn_test':
-    connectionTest(host=host,user=user,passwd=pw)
-  elif args.cmd == 'gen_nums':
-    if args.n is None:
-      genNums()
-    else:
-      genNums(args.n)
+  if args.cmd == choicesList[0]: # desc_table
+    database.describeTable(args.table)
+  elif args.cmd == choicesList[1]: # gen_users
+    database.genUsers(n=args.number, name=args.name)
+  elif args.cmd == choicesList[2]: # gen_requests
+    database.genRequests(args.number)
+  elif args.cmd == choicesList[3]: # gen_transactions
+    database.genTransactions(args.number)
