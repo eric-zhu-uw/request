@@ -12,7 +12,7 @@ parser.add_argument('--table', default='actives', help='What table to describe (
 parser.add_argument('unused', nargs='*', help='Irrelevant info ')
 
 
-def parseEnvFile(fileName='.env'):
+def parseEnvFile(fileName='../.env'):
   f = open(fileName, "r")
   conf = []
   for line in f:
