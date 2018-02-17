@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/eric-zhu-uw/request#readme",
   "dependencies": {
+    "global": "^4.3.2",
     "node-server-modules": "file:server",
     "react-native-modules": "file:native"
   },

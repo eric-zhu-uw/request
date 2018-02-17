@@ -1,6 +1,7 @@
 import { Strategy as LocalStrategy } from 'passport-local';
 import passport from 'passport';
 import { User } from '../data/models';
+import logger from '../logger';
 
 /**
  * The purpose of serialize/deserialize is so you don't have to query
@@ -27,13 +28,15 @@ passport.use(
     User.findOne({ where: { username, password } })
       .then(res => {
         if (!res) {
-          return done(null, false, { err: 'Incorrect user/pass.' });
+          return done(null, false, {
+            message: 'Incorrect login credentials',
+          });
         }
 
         return done(null, { id: res.dataValues.username });
       })
       .catch(err => {
-        console.error(err);
+        logger.error(err);
         return done(err);
       });
   }),

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const env = process.env.NODE_ENV;
-const sessionExpiryDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1 day
+const sessionExpiryDate = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000); // 10 years
 
 const development = {
   db: {
