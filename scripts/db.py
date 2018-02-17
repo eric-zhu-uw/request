@@ -1,13 +1,28 @@
 import MySQLdb
 import random
 
+class bcolours:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+def printError(e):
+  print bcolours.FAIL + "Error encountered: %s" % e + bcolours.ENDC
+
+
 class Connection:
 
   def __init__(self,host='localhost',user='root',passwd='',db='request'):
     try:
       self.conn = MySQLdb.connect(host=host, user=user, passwd=passwd, db=db)
     except MySQLdb.Error, e:
-      print "Error connecting: %s" % e
+      print bcolours.FAIL + "Error connecting: %s" % e + bcolours.ENDC
       exit(1)
 
   def __del__(self):
@@ -21,12 +36,13 @@ class Connection:
       cur = self.conn.cursor()
       cur.execute("describe %s"%table)
 
-      print "TABLE: %s" % table
+      print bcolours.HEADER + "TABLE: %s" % table + bcolours.ENDC
       print [i[0] for i in cur.description]
       for row in cur.fetchall():
         print row
     except MySQLdb.Error, e:
-      print "Error encountered: %s" % e
+      printError(e)
+
 
   def genUsers(self,name='user', n=100):
     try:
@@ -51,10 +67,11 @@ class Connection:
       vals = vals[:-1]
       cur.execute("INSERT IGNORE INTO USERS (username, firstname,lastname,password,createdAt,updatedAt) VALUES " + vals)
       self.conn.commit()
-      print "Successfully inserted %d users" % n
+      print bcolours.OKGREEN + "Successfully inserted %d users" % n + bcolours.ENDC
 
     except MySQLdb.Error, e:
-      print "Error encountered: %s" % e
+      printError(e)
+
 
   def genRequests(self, n=100):
     try:
@@ -80,7 +97,7 @@ class Connection:
       self.conn.commit()
 
     except MySQLdb.Error, e:
-      print "Error encountered: %s" % e
+      printError(e)
 
 
   """TODO: Clean this up or integrate it with genRequests"""
@@ -116,4 +133,4 @@ class Connection:
       self.conn.commit()
 
     except MySQLdb.Error, e:
-      print "Error encountered: %s" % e
+      printError(e)

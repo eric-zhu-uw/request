@@ -18,12 +18,12 @@ def parseEnvFile(fileName='../.env'):
   for line in f:
     if not len(line) == 0:
       conf.append(tuple(map(lambda x: x.strip('\n'), line.split("="))))
-  conf = dict(conf)
-  return conf['DEV_DB_HOST'], conf['DEV_DB_USER'],conf['DEV_DB_PASS'],conf['DEV_APP_PORT']
+  return dict(conf)
 
 
 if __name__ == '__main__':
-  host,user,pw,port = parseEnvFile()
+  env = parseEnvFile()
+  host,user,pw = env['DEV_DB_HOST'], env['DEV_DB_USER'],env['DEV_DB_PASS']
   args = parser.parse_args()
   database = db.Connection(host=host,user=user,passwd=pw)
 
