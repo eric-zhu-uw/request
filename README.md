@@ -1,5 +1,6 @@
 # request
 
+[![Build Status](https://travis-ci.org/eric-zhu-uw/request.svg?branch=master)](https://travis-ci.org/eric-zhu-uw/request)
 A tool to manage money between friends.
 
 ## TODO

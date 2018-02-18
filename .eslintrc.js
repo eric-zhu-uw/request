@@ -71,6 +71,8 @@ module.exports = {
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
     'camelcase': 0,
+    'import/no-extraneous-dependencies': 0,
+    'no-plusplus': 0
   },
 
   settings: {

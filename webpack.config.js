@@ -3,19 +3,20 @@ const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
-/*  eslint func-names: 0  */
+const levels = ['error', 'warn', 'info', 'verbose', 'debug', 'silly'];
+
+/* eslint func-names: 0 */
 module.exports = function(env) {
   let isDebug = true;
   let buildonly = false;
-  let loggerLevel = "'info'";
-  let port = 3000;
+  let loggerLevel;
 
   if (env) {
     if (env.release) isDebug = false;
     if (env.buildonly) buildonly = true;
-    if (isDebug) loggerLevel = '"debug"';
-    if (env.verbose) loggerLevel = "'silly'";
-    if (env.port) port = env.port;
+    if (levels.some(level => level === env.loggerLevel)) {
+      loggerLevel = env.loggerLevel;
+    }
   }
 
   // const reScript = /\.(js|jsx|mjs)$/;
@@ -61,9 +62,7 @@ module.exports = function(env) {
     plugins: [
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': isDebug ? '"development"' : '"production"',
-        'process.env.LOGGER_LEVEL': loggerLevel,
-        'process.env.PORT': port,
-        __DEV__: isDebug,
+        'process.env.LOGGER_LEVEL': loggerLevel ? `'${loggerLevel}'` : false,
       }),
     ],
     watch: isDebug && !buildonly,
