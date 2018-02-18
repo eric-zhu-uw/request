@@ -52,17 +52,9 @@ ex. `yarn start --env.release`
 
 note: production option does not start the server
 
-#### Verbose logging
+#### Logging Level
 
-`--env.verbose`
-
-enables 'silly' level logging
-
-#### Port
-
-`--env.port=PORTNUM`
-
-default port is 3000
+`--env.loggerLevel ['error', 'warn', 'info', 'verbose', 'debug', 'silly']`
 
 #### Build Only
 

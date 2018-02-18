@@ -1,4 +1,5 @@
 /* eslint-env node, mocha */
+/* eslint import/no-extraneous-dependencies:0 */
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import logger from '../logger';
