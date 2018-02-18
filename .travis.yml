@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "8"
+services:
+  - mysql
+cache:
+  yarn: true
+  directories:
+    - "node_modules"
+before_install:
+  - npm i -g npm@4.6.1
+  - npm --version
+  - npm i -g yarn@1.3.2
+  - mysql -e 'CREATE DATABASE request;'
+install:
+  - yarn install
+script:
+  - yarn test:server

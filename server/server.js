@@ -16,11 +16,10 @@ const app = express();
 app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(morgan(__DEV__ ? 'dev' : 'common'));
-logger.level = process.env.LOGGER_LEVEL;
+app.use(morgan(process.env.NODE_ENV !== 'production' ? 'dev' : 'common'));
 logger.info(`Logger level: ${logger.level}`);
 
-if (__DEV__) {
+if (process.env.NODE_ENV !== 'production') {
   app.enable('trust proxy');
   logger.warn(
     `Running in ${
@@ -53,7 +52,7 @@ app.use(passport.session());
 app.use('/', routes);
 
 app.listen(process.env.PORT, () => {
-  logger.info(`The server is running at http://localhost:${process.env.PORT}/`);
+  logger.info(`The server is running at http://localhost:${config.app.port}/`);
 });
 
 export default app;
