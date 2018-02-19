@@ -14,6 +14,7 @@ module.exports = {
 
   globals: {
     __DEV__: true,
+    fetch: false
   },
 
   env: {
@@ -71,6 +72,11 @@ module.exports = {
     'prettier/prettier': 'error',
     'import/prefer-default-export': 0,
     'camelcase': 0,
+    'react/forbid-prop-types': 1,
+    'react/no-unused-state': 1,
+    'no-shadow': 1,
+    'consistent-return': 1,
+    'no-underscore-dangle': 1
     'import/no-extraneous-dependencies': 0,
     'no-plusplus': 0
   },
