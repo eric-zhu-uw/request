@@ -76,7 +76,7 @@ module.exports = {
     'react/no-unused-state': 1,
     'no-shadow': 1,
     'consistent-return': 1,
-    'no-underscore-dangle': 1
+    'no-underscore-dangle': 1,
     'import/no-extraneous-dependencies': 0,
     'no-plusplus': 0
   },

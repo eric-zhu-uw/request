@@ -42,4 +42,7 @@ router.get('/get-transactions', (req, res) => {
     .catch(err => res.send(err));
 });
 
+// TODO: get friends (status query)
+// TODO: get active friend requests ()
+
 export default router;

@@ -57,4 +57,4 @@ const ModelTypes = {
   FriendStatus,
 };
 
-export { Triggers, ModelTypes };
+export { Triggers, ModelTypes, FriendStatus };
