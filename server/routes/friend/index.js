@@ -3,6 +3,12 @@ import { Friend, ModelTypes } from '../../data/models';
 
 const router = Router();
 
+/**
+ *  Post a friend request from the current user to the specified user.
+ *  If a friend relationship already exists where the other user has a request
+ *  to be the current user's friend, it will be treated as an accept.
+ *  @param: {String} username of the user to send the request to.
+ */
 router.post('/add', (req, res) => {
   if (req.user) {
     // TODO: will the user get the friend id or username?
@@ -41,6 +47,10 @@ router.post('/add', (req, res) => {
   }
 });
 
+/**
+ *  Accept a friend request from the other user.
+ *  @param: {String} username of the user who send the request.
+ */
 router.post('/accept', (req, res) => {
   if (req.user) {
     // TODO: will the user get the friend id or username?
