@@ -51,10 +51,10 @@ router.get('/get-friends', (req, res) => {
   const { id } = req.user;
   const findAllParams = {
     where: {
-      [Op.and]: [
-        ([Op.or]: [{ user_1: id }, { user_2: id }]),
-        ([Op.eq]: { status: ModelTypes.FriendStatus.ACCEPTED }),
-      ],
+      [Op.and]: {
+        [Op.or]: [{ user_1: id }, { user_2: id }],
+        [Op.eq]: { status: ModelTypes.FriendStatus.ACCEPTED },
+      },
     },
   };
   // TODO:  results into just an array of other users?
@@ -72,10 +72,10 @@ router.get('/get-active-friend-requests', (req, res) => {
   const { id } = req.user;
   const findAllParams = {
     where: {
-      [Op.and]: [
-        ([Op.eq]: { action_user: id }),
-        ([Op.eq]: { status: ModelTypes.FriendStatus.PENDING }),
-      ],
+      [Op.and]: {
+        [Op.eq]: { action_user: id },
+        [Op.eq]: { status: ModelTypes.FriendStatus.PENDING },
+      },
     },
   };
   // TODO:  results into just an array of other users?
