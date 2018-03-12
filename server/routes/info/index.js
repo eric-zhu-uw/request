@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Op } from 'sequelize';
-import { Request, Ledger } from '../../data/models';
+import { Request, Ledger, Friend, ModelTypes } from '../../data/models';
 
 const router = Router();
 
@@ -42,7 +42,46 @@ router.get('/get-transactions', (req, res) => {
     .catch(err => res.send(err));
 });
 
-// TODO: get friends (status query)
-// TODO: get active friend requests ()
+/**
+ *  Gets all friends of a user.
+ *  @param: {String} username
+ *  @returns: {Array} of friend objects
+ */
+router.get('/get-friends', (req, res) => {
+  const { id } = req.user;
+  const findAllParams = {
+    where: {
+      [Op.and]: [
+        ([Op.or]: [{ user_1: id }, { user_2: id }]),
+        ([Op.eq]: { status: ModelTypes.FriendStatus.ACCEPTED }),
+      ],
+    },
+  };
+  // TODO:  results into just an array of other users?
+  Friend.findAll(findAllParams)
+    .then(transactions => res.json(transactions))
+    .catch(err => res.send(err));
+});
+
+/**
+ *  Gets all friend requests that a user need to respond to.
+ *  @param: {String} username
+ *  @returns: {Array} of friend objects
+ */
+router.get('/get-active-friend-requests', (req, res) => {
+  const { id } = req.user;
+  const findAllParams = {
+    where: {
+      [Op.and]: [
+        ([Op.eq]: { action_user: id }),
+        ([Op.eq]: { status: ModelTypes.FriendStatus.PENDING }),
+      ],
+    },
+  };
+  // TODO:  results into just an array of other users?
+  Friend.findAll(findAllParams)
+    .then(transactions => res.json(transactions))
+    .catch(err => res.send(err));
+});
 
 export default router;
