@@ -4,6 +4,9 @@ import sequelize from '../sequelize';
 const Friend = sequelize.define(
   'Friend',
   {
+    /** user_1 should always be the lexigraphically first/lesser username.
+     *  (user_1 < user_2).
+     */
     user_1: {
       primaryKey: true,
       type: Type.STRING(20),
