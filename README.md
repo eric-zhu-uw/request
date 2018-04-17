@@ -5,17 +5,10 @@ A tool to manage money between friends.
 
 ## TODO
 
-* [x] setup linters and basic dev environment for server
-* [x] setup webpack and automatic build tools for server
-* [x] server side logger
-* [ ] look into server-side debuggers
-* [ ] plan out API-endpoint and necessary database tables
-* [x] re-organize backend code into folder & debate if front-end should be in its own repository
-* [ ] separate build scripts for nativeIOS|Android|backend and then automatic upload into AWS
-* [ ] setup Redux with React Native
-* [ ] setup mocha tests
-* [ ] docker
-* [ ] travis CI
+* [x] test to see if LocalStorage persists & whether I need to always set on rebundle
+* [x] Have a better status for login, not [0=have not tried, 1=failed, 2=success]
+* [] Remove console.logs()
+* [] Add some tests for reducers/selectors/component
 
 ## Important Software
 
