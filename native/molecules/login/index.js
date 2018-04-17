@@ -1,38 +1,33 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Text, TextInput, View } from 'react-native';
 
-export default class LoginScreen extends React.Component {
+import { validateLogin } from '../../action_creators/login';
+
+class LoginScreen extends React.Component {
+  static getDerivedStateFromProps(nextProps) {
+    const { navigation, status } = nextProps;
+    const { navigate } = navigation;
+
+    if (status === 2) {
+      navigate('ListTabs');
+    }
+
+    return {};
+  }
+
   constructor(props) {
     super(props);
     this.state = { username: '', password: '', message: '' };
-
     this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin() {
-    const { navigation } = this.props;
-    const { navigate } = navigation;
+    const { validateLoginDispatch } = this.props;
 
     const { username, password } = this.state;
-
-    // will set a cookie if successful
-    fetch('http://192.168.1.196:3000/login', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then(res => {
-        if (res.status !== 200) {
-          this.setState(JSON.parse(res._bodyText));
-        } else {
-          navigate('ListTabs');
-        }
-      })
-      .catch();
+    validateLoginDispatch(username, password);
   }
 
   render() {
@@ -60,4 +55,11 @@ export default class LoginScreen extends React.Component {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.object.isRequired,
+  validateLoginDispatch: PropTypes.func.isRequired
 };
+
+const mapDispatchToProps = dispatch => ({
+  validateLoginDispatch: (username, password) => dispatch(validateLogin(username, password))
+});
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

@@ -17,7 +17,7 @@ router.post('/', (req, res, next) =>
       }
       return res.status(200).json({ message: 'Success' });
     });
-  })(req, res, next),
+  })(req, res, next)
 );
 
 export default router;

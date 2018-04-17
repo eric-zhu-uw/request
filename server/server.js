@@ -21,11 +21,7 @@ logger.info(`Logger level: ${logger.level}`);
 
 if (process.env.NODE_ENV !== 'production') {
   app.enable('trust proxy');
-  logger.warn(
-    `Running in ${
-      process.env.NODE_ENV
-    } environment, not suitable for production use.`,
-  );
+  logger.warn(`Running in ${process.env.NODE_ENV} environment, not suitable for production use.`);
 }
 
 const pe = new PrettyError();
@@ -51,7 +47,7 @@ app.use(passport.session());
 // -----/ Initialize Routes --------------------
 app.use('/', routes);
 
-app.listen(process.env.PORT, () => {
+app.listen(config.app.port, () => {
   logger.info(`The server is running at http://localhost:${config.app.port}/`);
 });
 
