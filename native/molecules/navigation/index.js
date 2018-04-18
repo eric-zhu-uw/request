@@ -1,5 +1,6 @@
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { SwitchNavigator, TabNavigator } from 'react-navigation';
 
+import { Routes } from '../../platform/constants';
 import LoadingScreen from '../loading';
 import LoginScreen from '../login';
 import ProfileScreen from '../profile';
@@ -7,27 +8,22 @@ import RequestScreen from '../request';
 
 const ListTabs = TabNavigator(
   {
-    RequestScreen: {
-      screen: RequestScreen
-    },
-
-    ProfileScreen: {
-      screen: ProfileScreen
-    }
+    [Routes.REQUEST]: { screen: RequestScreen },
+    [Routes.PROFILE]: { screen: ProfileScreen }
   },
   {
     swipeEnabled: true
   }
 );
 
-const AppRouter = StackNavigator(
+const AppRouter = SwitchNavigator(
   {
-    LoadingScreen: { screen: LoadingScreen },
-    LoginScreen: { screen: LoginScreen },
-    ListTabs: { screen: ListTabs }
+    [Routes.LOADING]: { screen: LoadingScreen },
+    [Routes.LOGIN]: { screen: LoginScreen },
+    [Routes.LISTTABS]: { screen: ListTabs }
   },
   {
-    initialRouteName: 'LoadingScreen',
+    initialRouteName: Routes.LOADING,
     headerMode: 'none'
   }
 );

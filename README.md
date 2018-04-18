@@ -5,11 +5,6 @@ A tool to manage money between friends.
 
 ## TODO
 
-* [x] test to see if LocalStorage persists & whether I need to always set on rebundle
-* [x] Have a better status for login, not [0=have not tried, 1=failed, 2=success]
-* [] Remove console.logs()
-* [] Add some tests for reducers/selectors/component
-
 ## Important Software
 
 nvm --version `0.33.8`
