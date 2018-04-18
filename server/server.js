@@ -36,7 +36,9 @@ app.use((err, req, res, next) => {
 });
 
 // -----/ Sync DB Tables to Models --------------------
-Model.sync(config.db.options);
+if (process.env.NODE_ENV !== 'test') {
+  Model.sync(config.db.options);
+}
 
 // -----/ Setup Session and Passport middleware --------------------
 app.set('trust proxy', 1);
@@ -47,8 +49,10 @@ app.use(passport.session());
 // -----/ Initialize Routes --------------------
 app.use('/', routes);
 
-app.listen(config.app.port, () => {
-  logger.info(`The server is running at http://localhost:${config.app.port}/`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(config.app.port, () => {
+    logger.info(`The server is running at http://localhost:${config.app.port}/`);
+  });
+}
 
 export default app;
