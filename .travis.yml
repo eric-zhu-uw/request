@@ -16,3 +16,6 @@ install:
   - yarn install
 script:
   - yarn test:server
+branches:
+  only:
+    - master
