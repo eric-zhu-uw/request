@@ -3,15 +3,18 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import logger from '../logger';
 import config from '../config';
+import app from '../server';
 
 chai.use(chaiHttp);
 // Our parent block
-describe('Signup', () => {
-  const app = require('../server'); // eslint-disable-line global-require
+describe('Signup', function() {
   beforeEach(done => {
-    app.default.listen(config.app.port, done);
+    this.server = app.listen(config.app.port, done);
   });
 
+  afterEach(done => {
+    this.server.close(done);
+  });
   /*
   * Test the /POST route
   */
@@ -30,6 +33,12 @@ describe('Signup', () => {
           logger.error(err);
           throw err;
         });
+    });
+  });
+
+  describe('BLANK TEST', () => {
+    it('BLANK', () => {
+      expect(true);
     });
   });
 });

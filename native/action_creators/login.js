@@ -1,4 +1,6 @@
-import { Action } from '../platform/constants';
+import { SecureStore } from 'expo';
+
+import { Actions, LocalStorage } from '../platform/constants';
 
 function loginApi(username, password) {
   return fetch('http://192.168.1.196:3000/login', {
@@ -14,7 +16,16 @@ function loginApi(username, password) {
 export const validateLogin = (username, password) => dispatch =>
   loginApi(username, password).then(res => {
     dispatch({
-      type: Action.LOGIN_API_REQUEST,
+      type: Actions.LOGIN_API_REQUEST,
       status: res.ok
     });
   });
+
+export const logout = () => dispatch => {
+  const setUsername = SecureStore.setItemAsync(LocalStorage.USERNAME, '');
+  const setPassword = SecureStore.setItemAsync(LocalStorage.PASSWORD, '');
+
+  return Promise.all([setUsername, setPassword]).then(() => {
+    dispatch({ type: Actions.LOGOUT });
+  });
+};

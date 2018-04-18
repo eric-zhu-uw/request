@@ -1,9 +1,9 @@
-import { Action } from '../platform/constants';
+import { Actions } from '../platform/constants';
 
 export default (state = 0, action) => {
   const { type, status } = action;
   switch (type) {
-    case Action.LOGIN_API_REQUEST:
+    case Actions.LOGIN_API_REQUEST:
       /**
         0 = API call has not been made
         1 = Login successful
@@ -14,6 +14,8 @@ export default (state = 0, action) => {
         return { ...state, status: 1 };
       }
       return { ...state, status: 2 };
+    case Actions.LOGOUT:
+      return { ...state, status: 0 };
     default:
       return state;
   }

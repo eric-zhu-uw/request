@@ -8,7 +8,7 @@ const sessionExpiryDate = new Date(Date.now() + 10 * 365 * 24 * 60 * 60 * 1000);
 
 const development = {
   app: {
-    port: 3000,
+    port: 3000
   },
   db: {
     database: process.env.DEV_DB_DATABASE || 'request',
@@ -16,28 +16,28 @@ const development = {
     user: process.env.DEV_DB_USER || 'root',
     pass: process.env.DEV_DB_PASS || '',
     options: {
-      forced: process.env.DEV_DB_OPT_FORCED || true,
-    },
+      forced: process.env.DEV_DB_OPT_FORCED || true
+    }
   },
   session: {
     name: 'sessionId',
     secret: 'KMylyQyPsgCLaAxbMIEH',
     cookie: { httpOnly: true, expires: sessionExpiryDate },
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false
   },
   winston: {
     timestamp: () => new Date().toLocaleTimeString(),
-    colorize: true,
+    colorize: true
   },
   logger: {
-    level: 'debug',
-  },
+    level: 'debug'
+  }
 };
 
 const test = {
   app: {
-    port: 8080,
+    port: 8080
   },
   db: {
     database: process.env.DEV_DB_DATABASE || 'request',
@@ -45,24 +45,24 @@ const test = {
     user: process.env.DEV_DB_USER || 'root',
     pass: process.env.DEV_DB_PASS || '',
     options: {
-      forced: process.env.DEV_DB_OPT_FORCED || true,
-    },
+      forced: process.env.DEV_DB_OPT_FORCED || true
+    }
   },
   session: {
     name: 'sessionId',
     secret: 'KMylyQyPsgCLaAxbMIEH',
     cookie: { httpOnly: true, expires: sessionExpiryDate },
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false
   },
   logger: {
-    level: 'info',
-  },
+    level: 'info'
+  }
 };
 
 const config = {
   development,
-  test,
+  test
 };
 
 export default config[env];

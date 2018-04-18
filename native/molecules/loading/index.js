@@ -6,17 +6,18 @@ import { SecureStore } from 'expo';
 
 import { selectors } from '../../reducers_selectors';
 import { validateLogin } from '../../action_creators/login';
+import { Routes, LocalStorage } from '../../platform/constants';
 
 class LoadingScreen extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     const { navigation, status } = nextProps;
     const { navigate } = navigation;
-    if (status === 1) {
-      navigate('LoginScreen');
+    if (status === 2) {
+      navigate(Routes.LOGIN);
     }
 
-    if (status === 2) {
-      navigate('ListTabs');
+    if (status === 1) {
+      navigate(Routes.LISTTABS);
     }
 
     return {};
@@ -29,23 +30,11 @@ class LoadingScreen extends React.Component {
 
   componentDidMount() {
     const { validateLoginDispatch } = this.props;
-    // const p1 = SecureStore.setItemAsync('username', 'z');
-    // const p2 = SecureStore.setItemAsync('password', 'password');
-    let username = '';
-    let password = '';
-    const p3 = SecureStore.getItemAsync('username');
-    const p4 = SecureStore.getItemAsync('password');
-    // const p = Promise.all([p1, p2]).then(() => {
-    //   const p3 = SecureStore.getItemAsync('username');
-    //   const p4 = SecureStore.getItemAsync('password');
-    //
-    //   return Promise.all([p3, p4]);
-    // });
+    const getUsername = SecureStore.getItemAsync(LocalStorage.USERNAME);
+    const getPassword = SecureStore.getItemAsync(LocalStorage.PASSWORD);
 
-    Promise.all([p3, p4]).then(res => {
-      username = res[0];
-      password = res[1];
-      validateLoginDispatch(username, password);
+    Promise.all([getUsername, getPassword]).then(res => {
+      validateLoginDispatch(res[0], res[1]);
     });
   }
 
@@ -59,9 +48,7 @@ class LoadingScreen extends React.Component {
 }
 
 LoadingScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
-  validateLoginDispatch: PropTypes.func.isRequired,
-  status: PropTypes.number.isRequired
+  validateLoginDispatch: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {

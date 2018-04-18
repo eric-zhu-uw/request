@@ -2,16 +2,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Text, TextInput, View } from 'react-native';
+import { SecureStore } from 'expo';
 
 import { validateLogin } from '../../action_creators/login';
+import { selectors } from '../../reducers_selectors';
+import { Routes, LocalStorage } from '../../platform/constants';
 
 class LoginScreen extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     const { navigation, status } = nextProps;
     const { navigate } = navigation;
-
-    if (status === 2) {
-      navigate('ListTabs');
+    if (status === 1) {
+      navigate(Routes.LISTTABS);
     }
 
     return {};
@@ -27,7 +29,12 @@ class LoginScreen extends React.Component {
     const { validateLoginDispatch } = this.props;
 
     const { username, password } = this.state;
-    validateLoginDispatch(username, password);
+    const setUsername = SecureStore.setItemAsync(LocalStorage.USERNAME, username);
+    const setPassword = SecureStore.setItemAsync(LocalStorage.PASSWORD, password);
+
+    Promise.all([setUsername, setPassword]).then(() => {
+      validateLoginDispatch(username, password);
+    });
   }
 
   render() {
@@ -54,12 +61,19 @@ class LoginScreen extends React.Component {
 }
 
 LoginScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
   validateLoginDispatch: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => {
+  const { getLoginSelectors } = selectors(state);
+  const { getLoginStatus } = getLoginSelectors();
+  const status = getLoginStatus();
+
+  return { status };
 };
 
 const mapDispatchToProps = dispatch => ({
   validateLoginDispatch: (username, password) => dispatch(validateLogin(username, password))
 });
 
-export default connect(null, mapDispatchToProps)(LoginScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

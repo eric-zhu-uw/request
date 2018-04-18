@@ -79,7 +79,8 @@ module.exports = {
     'consistent-return': 1,
     'no-underscore-dangle': 1,
     'import/no-extraneous-dependencies': 0,
-    'no-plusplus': 0
+    'no-plusplus': 0,
+    'func-names': 0
   },
 
   settings: {
