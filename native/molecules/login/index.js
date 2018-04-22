@@ -8,21 +8,22 @@ import { validateLogin } from '../../action_creators/login';
 import { selectors } from '../../reducers_selectors';
 import { Routes, LocalStorage } from '../../platform/constants';
 
-class LoginScreen extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { navigation, status } = nextProps;
-    const { navigate } = navigation;
-    if (status === 1) {
-      navigate(Routes.LISTTABS);
-    }
-
-    return {};
-  }
-
+export class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = { username: '', password: '', message: '' };
     this.handleLogin = this.handleLogin.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { navigation } = this.props;
+    const { status } = nextProps;
+    const { navigate } = navigation;
+    if (status === 1) {
+      navigate(Routes.LISTTABS);
+    } else {
+      this.setState({ message: 'Invalid username or password. Please try again!' });
+    }
   }
 
   handleLogin() {
@@ -32,9 +33,13 @@ class LoginScreen extends React.Component {
     const setUsername = SecureStore.setItemAsync(LocalStorage.USERNAME, username);
     const setPassword = SecureStore.setItemAsync(LocalStorage.PASSWORD, password);
 
-    Promise.all([setUsername, setPassword]).then(() => {
-      validateLoginDispatch(username, password);
-    });
+    Promise.all([setUsername, setPassword])
+      .then(() => {
+        validateLoginDispatch(username, password);
+      })
+      .catch(() => {
+        this.setState({ message: 'An error has occured. Please try again!' });
+      });
   }
 
   render() {
@@ -46,12 +51,14 @@ class LoginScreen extends React.Component {
         <TextInput
           style={{ height: 40 }}
           placeholder="Username"
-          onChangeText={username => this.setState({ username })}
+          maxLength={40}
+          onChangeText={username => this.setState({ username, message: '' })}
         />
         <TextInput
           style={{ height: 40 }}
           placeholder="Password"
-          onChangeText={password => this.setState({ password })}
+          maxLength={40}
+          onChangeText={password => this.setState({ password, message: '' })}
         />
         <Button title="Login" onPress={this.handleLogin} />
         <Text style={{ paddingTop: 5 }}>{message}</Text>
@@ -61,10 +68,12 @@ class LoginScreen extends React.Component {
 }
 
 LoginScreen.propTypes = {
-  validateLoginDispatch: PropTypes.func.isRequired
+  validateLoginDispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  status: PropTypes.number.isRequired
 };
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   const { getLoginSelectors } = selectors(state);
   const { getLoginStatus } = getLoginSelectors();
   const status = getLoginStatus();
@@ -72,7 +81,7 @@ const mapStateToProps = state => {
   return { status };
 };
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   validateLoginDispatch: (username, password) => dispatch(validateLogin(username, password))
 });
 

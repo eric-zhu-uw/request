@@ -14,8 +14,11 @@ before_install:
   - mysql -e 'CREATE DATABASE request;'
 install:
   - yarn install
+  - cd server && yarn install && cd ..
+  - cd native && yarn install && cd ..
 script:
   - yarn test:server
+  - yarn test:native
 branches:
   only:
     - master
