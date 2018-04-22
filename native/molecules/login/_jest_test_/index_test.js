@@ -123,7 +123,7 @@ describe('native/molecules/login/index.js', function() {
 
     it('correctly returns all status prop', () => {
       const state = { login: { status: 0 } };
-      expect(mapStateToProps(state)).toMatchObject({ status: 0 });
+      expect(mapStateToProps(state)).toEqual({ status: 0 });
     });
   });
 

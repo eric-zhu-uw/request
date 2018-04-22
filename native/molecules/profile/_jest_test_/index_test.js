@@ -5,7 +5,7 @@ import TestRenderer from 'react-test-renderer';
 import { Routes } from '../../../platform/constants';
 import { ProfileScreen, mapStateToProps, mapDispatchToProps } from '../index';
 
-describe('native/molecules/profile/index.js', () => {
+describe('native/molecules/profile/index.js', function() {
   describe('#render', () => {
     beforeEach(() => {
       this.props = {
@@ -53,7 +53,7 @@ describe('native/molecules/profile/index.js', () => {
 
     it('correctly returns all status prop', () => {
       const state = { login: { status: 0 } };
-      expect(mapStateToProps(state)).toMatchObject({ status: 0 });
+      expect(mapStateToProps(state)).toEqual({ status: 0 });
     });
   });
 
