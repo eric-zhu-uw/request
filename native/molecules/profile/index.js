@@ -2,22 +2,13 @@ import React from 'react';
 import { Text, View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { SecureStore } from 'expo';
 
 import { logout } from '../../action_creators/login';
 import { selectors } from '../../reducers_selectors';
-import { Routes } from '../../platform/constants';
+import { Routes, LocalStorage } from '../../platform/constants';
 
-class ProfileScreen extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { navigation, status } = nextProps;
-    const { navigate } = navigation;
-    if (status === 0) {
-      navigate(Routes.LOGIN);
-    }
-
-    return {};
-  }
-
+export class ProfileScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,6 +18,15 @@ class ProfileScreen extends React.Component {
     this.openSettingsTabs = this.openSettingsTabs.bind(this);
     this.closeSettingsTabs = this.closeSettingsTabs.bind(this);
     this.logout = this.logout.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { navigation } = this.props;
+    const { status } = nextProps;
+    const { navigate } = navigation;
+    if (status === 0) {
+      navigate(Routes.LOGIN);
+    }
   }
 
   openSettingsTabs() {
@@ -43,7 +43,9 @@ class ProfileScreen extends React.Component {
 
   logout() {
     const { logoutDispatch } = this.props;
-    logoutDispatch();
+    const setUsername = SecureStore.setItemAsync(LocalStorage.USERNAME, '');
+    const setPassword = SecureStore.setItemAsync(LocalStorage.PASSWORD, '');
+    Promise.all([setUsername, setPassword]).then(() => logoutDispatch()); // TODO: on failure, retry
   }
 
   render() {
@@ -71,10 +73,12 @@ class ProfileScreen extends React.Component {
 }
 
 ProfileScreen.propTypes = {
-  logoutDispatch: PropTypes.func.isRequired
+  logoutDispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  status: PropTypes.number.isRequired
 };
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   const { getLoginSelectors } = selectors(state);
   const { getLoginStatus } = getLoginSelectors();
   const status = getLoginStatus();
@@ -82,7 +86,7 @@ const mapStateToProps = state => {
   return { status };
 };
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   logoutDispatch: () => dispatch(logout())
 });
 

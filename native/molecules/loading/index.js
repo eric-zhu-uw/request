@@ -8,34 +8,33 @@ import { selectors } from '../../reducers_selectors';
 import { validateLogin } from '../../action_creators/login';
 import { Routes, LocalStorage } from '../../platform/constants';
 
-class LoadingScreen extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { navigation, status } = nextProps;
-    const { navigate } = navigation;
-    if (status === 2) {
-      navigate(Routes.LOGIN);
-    }
-
-    if (status === 1) {
-      navigate(Routes.LISTTABS);
-    }
-
-    return {};
-  }
-
+export class LoadingScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
   componentDidMount() {
-    const { validateLoginDispatch } = this.props;
+    const { validateLoginDispatch, navigation } = this.props;
+    const { navigate } = navigation;
     const getUsername = SecureStore.getItemAsync(LocalStorage.USERNAME);
     const getPassword = SecureStore.getItemAsync(LocalStorage.PASSWORD);
+    Promise.all([getUsername, getPassword])
+      .then(res => validateLoginDispatch(res[0], res[1]))
+      .catch(() => navigate(Routes.LOGIN));
+  }
 
-    Promise.all([getUsername, getPassword]).then(res => {
-      validateLoginDispatch(res[0], res[1]);
-    });
+  componentWillReceiveProps(nextProps) {
+    const { navigation } = this.props;
+    const { status } = nextProps;
+    const { navigate } = navigation;
+    if (status === 2 || status === -1) {
+      navigate(Routes.LOGIN);
+    }
+
+    if (status === 1) {
+      navigate(Routes.LISTTABS);
+    }
   }
 
   render() {
@@ -48,10 +47,12 @@ class LoadingScreen extends React.Component {
 }
 
 LoadingScreen.propTypes = {
-  validateLoginDispatch: PropTypes.func.isRequired
+  validateLoginDispatch: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+  status: PropTypes.number.isRequired
 };
 
-const mapStateToProps = state => {
+export const mapStateToProps = state => {
   const { getLoginSelectors } = selectors(state);
   const { getLoginStatus } = getLoginSelectors();
   const status = getLoginStatus();
@@ -59,7 +60,7 @@ const mapStateToProps = state => {
   return { status };
 };
 
-const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = dispatch => ({
   validateLoginDispatch: (username, password) => dispatch(validateLogin(username, password))
 });
 

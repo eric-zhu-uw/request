@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "A tool to manage money between friends.",
   "main": "server.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha --require @babel/register --exit test/*.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.0",
@@ -19,5 +22,11 @@
     "winston": "^2.4.0"
   },
   "repository": "https://github.com/eric-zhu-uw/request.git",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@babel/register": "^7.0.0-beta.44",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "mocha": "^5.1.1"
+  }
 }
