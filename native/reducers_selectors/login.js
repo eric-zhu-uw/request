@@ -8,8 +8,7 @@ export default (state = {}, action) => {
        -1 = "/login" route threw Error
         0 = API call has not been made
         1 = Login successful
-        2 = Login from Loading Screen failed
-        3 = Login from Login Screen failed
+        2 = Login failed
       */
       if (status) {
         return { ...state, status: 1 };
